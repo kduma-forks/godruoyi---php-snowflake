@@ -303,5 +303,18 @@ class SnowflakeTest extends TestCase
             'datacenter' => $datacenter,
         ], $parsed);
         $this->assertEquals($expectedId, $id);
+        $this->assertEquals($expectedTimestamp, $snowflake->toMicrotime((int) $parsed['timestamp']));
+    }
+
+    public function test_interpretation_of_timestamps(): void
+    {
+        $startTimestamp = 1;
+        $expectedTimestamp = 1577836800000;
+        $timestamp = 1577836800000 - $startTimestamp;
+
+        $snowflake = new Snowflake(999, 20);
+        $snowflake->setStartTimeStamp($startTimestamp);
+
+        $this->assertEquals($expectedTimestamp, $snowflake->toMicrotime($timestamp));
     }
 }
